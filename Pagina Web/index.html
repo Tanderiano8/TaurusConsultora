@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Taurus Consultora | Seguridad e Higiene</title>
+    
+    <link rel="icon" type="image/png" href="favicon.png">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --color-blanco: #ffffff;
+            --color-gris-claro: #f4f4f4;
+            --color-gris-medio: #888888;
+            --color-gris-oscuro: #333333;
+            --color-negro: #000000;
+            --fuente-principal: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; overflow-x: hidden; }
+
+        body {
+            font-family: var(--fuente-principal);
+            color: var(--color-gris-oscuro);
+            background-color: var(--color-blanco);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        a { text-decoration: none; color: inherit; }
+        ul { list-style: none; }
+        img { max-width: 100%; display: block; }
+
+        /* --- NAVEGACIÓN --- */
+        header { background-color: var(--color-blanco); box-shadow: 0 2px 5px rgba(0,0,0,0.1); position: fixed; width: 100%; top: 0; z-index: 1000; height: 80px; display: flex; align-items: center; }
+        nav { width: 100%; padding: 0 2rem; display: flex; justify-content: space-between; align-items: center; }
+        .brand-container { display: flex; align-items: center; gap: 15px; text-transform: uppercase; font-weight: 800; font-size: 1.2rem; color: var(--color-negro); letter-spacing: 1px; }
+        .brand-container img { height: 55px; width: auto; object-fit: contain; }
+        
+        .nav-links { display: flex; gap: 2rem; position: relative; }
+        .nav-links a { font-weight: 600; text-transform: uppercase; font-size: 0.9rem; transition: color 0.3s; padding-bottom: 5px; display: block; }
+        .nav-indicator { position: absolute; bottom: -2px; left: 0; height: 2px; background-color: var(--color-negro); width: 0; transition: left 0.3s ease, width 0.3s ease, opacity 0.3s ease; opacity: 0; pointer-events: none; }
+        .hamburger { display: none; cursor: pointer; flex-direction: column; gap: 5px; width: 30px; z-index: 1001; }
+        .hamburger span { background-color: var(--color-negro); border-radius: 10px; height: 3px; width: 100%; transition: 0.4s ease; }
+        /* Animación para convertirse en X */
+        .hamburger.active span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+        .hamburger.active span:nth-child(2) { opacity: 0; }
+        .hamburger.active span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+
+        /* --- HERO --- */
+        .hero { height: 100vh; position: relative; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; color: var(--color-blanco); padding: 0 1rem; overflow: hidden; margin-top: 0; }
+        .video-background { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 60%; z-index: -2; }
+        .hero-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.6); z-index: -1; }
+        .hero-content { z-index: 1; margin-top: 60px; }
+        .hero h1 { font-size: 3.5rem; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 3px; font-weight: 900; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); }
+        .hero h2 { font-size: 1.5rem; font-weight: 300; margin-bottom: 2rem; color: #f0f0f0; text-shadow: 1px 1px 2px rgba(0,0,0,0.5); }
+        .btn { background-color: var(--color-blanco); color: var(--color-negro); padding: 15px 40px; font-weight: bold; text-transform: uppercase; border: 2px solid var(--color-blanco); transition: 0.3s; cursor: pointer; display: inline-block; }
+        .btn:hover { background-color: transparent; color: var(--color-blanco); }
+
+        /* --- NOSOTROS --- */
+        .nosotros { padding: 6rem 2rem; background-color: var(--color-blanco); overflow: hidden; }
+        .nosotros-container { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 1.2fr 1fr; gap: 4rem; align-items: center; }
+        .nosotros-texto p { margin-bottom: 1.5rem; font-size: 1.15rem; color: #444; }
+        .nosotros-texto strong { color: var(--color-negro); font-weight: bold; }
+        
+        /* ESTILO PARA QUE EL PNG TRANSPARENTE SE VEA BIEN */
+        .nosotros-imagen > img {
+            width: 100%; 
+            height: auto; 
+            max-height: 400px; /* Evita que el logo se haga gigante */
+            object-fit: contain; 
+        }
+
+        /* CONTADORES */
+        .stats-container {
+            display: flex;
+            justify-content: space-around;
+            background-color: var(--color-gris-claro);
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            margin-bottom: 3rem; 
+        }
+        .stat-box { text-align: center; }
+        .stat-number-wrapper {
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: var(--color-negro);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 1;
+            margin-bottom: 0.5rem;
+        }
+        .stat-text {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            color: #555;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        /* --- SERVICIOS --- */
+        .servicios { padding: 6rem 2rem; max-width: 1200px; margin: 0 auto; overflow: visible; background-color: var(--color-gris-claro); }
+        .section-title { text-align: center; margin-bottom: 4rem; font-size: 2.2rem; color: var(--color-negro); text-transform: uppercase; letter-spacing: 2px; position: relative; }
+        .section-title::after { content: ''; display: block; width: 60px; height: 3px; background: var(--color-negro); margin: 15px auto 0; }
+        .servicios-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
+        
+        .card { 
+            background: var(--color-blanco); 
+            padding: 2.5rem 2rem; 
+            text-align: center; 
+            border: 1px solid #e1e1e1; 
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05); 
+            transition: box-shadow 0.3s ease, border-color 0.3s ease; 
+        }
+        .card.aos-animate:hover { 
+            border-color: var(--color-negro); 
+            box-shadow: 0 15px 30px rgba(0,0,0,0.15); 
+            transform: translateY(-10px) !important; 
+        }
+        .card i { font-size: 2.5rem; margin-bottom: 1.5rem; color: var(--color-negro); transition: 0.3s ease;}
+        .card.aos-animate:hover i { transform: scale(1.1); }
+        .card h3 { margin-bottom: 1rem; text-transform: uppercase; font-size: 1.1rem;}
+        .card p { font-size: 0.95rem; color: #555; }
+
+        /* --- PORTFOLIO --- */
+        .portfolio { background-color: var(--color-blanco); padding: 6rem 0; overflow: visible; }
+        .portfolio-grid { max-width: 1200px; margin: 0 auto; padding: 0 2rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
+        
+        .project-card { 
+            background: var(--color-blanco); 
+            border-radius: 8px; 
+            overflow: hidden; 
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1); 
+            display: flex; 
+            flex-direction: column; 
+            height: 100%; 
+            transition: box-shadow 0.3s ease;
+            cursor: pointer; 
+        }
+        .project-card.aos-animate:hover { 
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2); 
+            transform: translateY(-8px) !important;
+        }
+        .project-img-preview { height: 200px; background-color: #ccc; background-size: cover; background-position: center; transition: transform 0.5s ease; }
+        .project-card.aos-animate:hover .project-img-preview { transform: scale(1.08); } 
+        .project-info { padding: 1.5rem; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; background: white; z-index: 1;}
+        .project-info h4 { margin-bottom: 0.5rem; font-size: 1.1rem; }
+        .project-info span { font-size: 0.85rem; color: #777; margin-bottom: 1rem; display: block; }
+        .btn-small { background: var(--color-negro); color: white; padding: 10px 15px; font-size: 0.8rem; text-transform: uppercase; border: none; cursor: pointer; width: 100%; font-weight: bold; transition: background 0.3s; }
+        .btn-small:hover { background-color: #444; }
+
+        /* --- CLIENTES --- */
+        .clientes { padding: 4rem 0; background-color: var(--color-blanco); overflow: hidden; }
+        .clientes .section-title { margin-bottom: 3rem; font-size: 1.8rem; }
+        .slider-clientes {
+            position: relative;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            gap: 40px; 
+            padding: 20px 0; 
+        }
+        .slider-clientes::before, .slider-clientes::after {
+            content: ''; position: absolute; top: 0; width: 150px; height: 100%; z-index: 2; pointer-events: none;
+        }
+        .slider-clientes::before { left: 0; background: linear-gradient(to right, #ffffff 0%, transparent 100%); }
+        .slider-clientes::after { right: 0; background: linear-gradient(to left, #ffffff 0%, transparent 100%); }
+        
+        .slide-track {
+            display: flex;
+            align-items: center;
+            width: max-content;
+            gap: 80px; 
+            padding-left: 80px; 
+            animation: scroll-left 50s linear infinite; 
+        }
+        .slide-track.reverse { animation: scroll-right 50s linear infinite; }
+        .slide-track:hover { animation-play-state: paused; }
+        
+        .slide-cliente { width: 200px; display: flex; justify-content: center; align-items: center; }
+        .slide-cliente img {
+            max-width: 100%; max-height: 110px; object-fit: contain;
+            opacity: 0.85; transition: 0.4s ease; cursor: pointer;
+        }
+        .slide-cliente img:hover { opacity: 1; transform: scale(1.15); }
+
+        @keyframes scroll-left { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+        @keyframes scroll-right { 0% { transform: translateX(-50%); } 100% { transform: translateX(0); } }
+
+        /* --- MODAL --- */
+        .modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.85); justify-content: center; align-items: center; padding: 20px; opacity: 0; transition: opacity 0.3s ease; }
+        .modal.show { display: flex; opacity: 1; }
+        .modal-wrapper { position: relative; width: 100%; max-width: 800px; display: flex; align-items: center; justify-content: center; }
+        .modal-content { background-color: #fefefe; width: 100%; border-radius: 8px; overflow: hidden; position: relative; animation: zoomIn 0.4s ease; box-shadow: 0 5px 30px rgba(0,0,0,0.3); }
+        @keyframes zoomIn { from {transform: scale(0.9); opacity: 0;} to {transform: scale(1); opacity: 1;} }
+        .modal-header { position: relative; }
+        .close-modal { position: absolute; top: 15px; right: 20px; color: white; font-size: 25px; font-weight: bold; cursor: pointer; z-index: 20; background: rgba(0,0,0,0.5); width: 35px; height: 35px; line-height: 35px; text-align: center; border-radius: 50%; transition: 0.3s; }
+        .close-modal:hover { background: rgba(0,0,0,0.8); transform: rotate(90deg); }
+        .nav-arrow { position: absolute; top: 50%; transform: translateY(-50%); color: white; font-size: 2.5rem; cursor: pointer; z-index: 30; padding: 15px; transition: 0.3s; opacity: 0.7; user-select: none; }
+        .nav-arrow:hover { opacity: 1; text-shadow: 0 0 10px rgba(255,255,255,0.5); transform: translateY(-50%) scale(1.1); }
+        .prev-arrow { left: -60px; }
+        .next-arrow { right: -60px; }
+        @media (max-width: 900px) {
+            .prev-arrow { left: 10px; color: white; background: rgba(0,0,0,0.3); border-radius: 50%; width: 40px; height: 40px; display:flex; align-items:center; justify-content:center; font-size: 1.5rem; top: 150px; }
+            .next-arrow { right: 10px; color: white; background: rgba(0,0,0,0.3); border-radius: 50%; width: 40px; height: 40px; display:flex; align-items:center; justify-content:center; font-size: 1.5rem; top: 150px; }
+        }
+        #modal-img { width: 100%; height: 350px; object-fit: contain; background-color: #111; }
+        .modal-body { padding: 2rem; }
+        .modal-address { color: #666; font-style: italic; margin-bottom: 1.5rem; display: block; border-bottom: 1px solid #eee; padding-bottom: 1rem;}
+        .modal-desc { line-height: 1.8; }
+
+        /* --- CONTACTO --- */
+        .contacto { padding: 6rem 2rem; background-color: var(--color-blanco); overflow: hidden; }
+        .contacto-container { max-width: 900px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; }
+        form { display: flex; flex-direction: column; gap: 1rem; }
+        input, textarea { padding: 12px; border: 1px solid #ccc; background: #fafafa; transition: 0.3s; }
+        input:focus, textarea:focus { border-color: var(--color-negro); outline: none; box-shadow: 0 0 5px rgba(0,0,0,0.1); }
+        button[type="submit"] { background-color: var(--color-negro); color: var(--color-blanco); padding: 15px; border: none; cursor: pointer; font-weight: bold; text-transform: uppercase; transition: 0.3s; }
+        button[type="submit"]:hover { background-color: #333; transform: translateY(-3px); box-shadow: 0 5px 10px rgba(0,0,0,0.2); }
+
+        /* ICONOS SOCIALES EN CONTACTO */
+        .social-icons-row { display: flex; gap: 15px; margin-top: 25px; }
+        .social-btn { width: 45px; height: 45px; background-color: var(--color-negro); color: var(--color-blanco); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; transition: 0.3s ease; box-shadow: 0 3px 6px rgba(0,0,0,0.1); }
+        .social-btn:hover { transform: translateY(-5px); box-shadow: 0 6px 12px rgba(0,0,0,0.2); }
+        .social-btn.insta:hover { background-color: #E1306C; }
+        .social-btn.face:hover { background-color: #1877F2; }
+        .social-btn.linkedin:hover { background-color: #0077b5; }
+        .social-btn.wpp:hover { background-color: #25D366; }
+
+        /* --- FOOTER & BOTONES FLOTANTES --- */
+        footer { background-color: var(--color-negro); color: var(--color-blanco); text-align: center; padding: 2rem 2rem 3rem; }
+        
+        .developer-credits { margin-top: 15px; font-size: 0.85rem; display: flex; align-items: center; justify-content: center; gap: 10px; opacity: 0.6; transition: 0.3s ease; }
+        .developer-credits:hover { opacity: 1; }
+        .developer-credits a { display: flex; align-items: center; gap: 6px; font-weight: 600; color: var(--color-blanco); text-decoration: none; }
+        .dev-logo { width: 22px; height: auto; }
+
+        .whatsapp-float { position: fixed; width: 60px; height: 60px; bottom: 40px; right: 40px; background-color: #25d366; color: #FFF; border-radius: 50px; text-align: center; font-size: 30px; box-shadow: 2px 2px 3px #999; z-index: 100; display: flex; align-items: center; justify-content: center; transition: 0.3s; }
+        .whatsapp-float:hover { transform: scale(1.1); background-color: #20b858; }
+
+        .scroll-top { position: fixed; width: 50px; height: 50px; bottom: 115px; right: 45px; background-color: var(--color-negro); color: white; border-radius: 50%; text-align: center; font-size: 20px; box-shadow: 2px 2px 3px rgba(0,0,0,0.3); z-index: 99; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: 0.4s ease; text-decoration: none; }
+        .scroll-top.show { opacity: 1; pointer-events: all; }
+        .scroll-top:hover { background-color: #444; transform: translateY(-5px); }
+
+        /* --- RESPONSIVE GENERAL --- */
+        @media (max-width: 768px) {
+            .hamburger { display: flex; }
+            .nav-indicator { display: none !important; }
+            
+            .nav-links { position: absolute; right: 0; top: 80px; background-color: var(--color-blanco); flex-direction: column; width: 100%; height: calc(100vh - 80px); transform: translateX(100%); transition: transform 0.3s ease-in-out; padding-top: 3rem; gap: 2.5rem; align-items: center; border-top: 1px solid #eee; box-shadow: -5px 0 15px rgba(0,0,0,0.1); }
+            .nav-links.active { transform: translateX(0%); }
+            .nav-links a { font-size: 1.2rem; }
+
+            .contacto-container { grid-template-columns: 1fr; gap: 2rem; }
+            .hero h1 { font-size: 2.2rem; }
+            .brand-container span { display: block; font-size: 1rem;}
+            .slider-clientes::before, .slider-clientes::after { width: 50px; }
+            .slide-cliente { width: 140px; }
+            .slide-cliente img { max-height: 85px; } 
+            
+            /* Ajustes para Nosotros en celular */
+            .nosotros-container { grid-template-columns: 1fr; gap: 2rem; text-align: center; }
+            .nosotros-texto p { text-align: left; }
+            .stats-container { flex-direction: column; gap: 1.5rem; }
+            
+            .whatsapp-float { bottom: 20px; right: 20px; width: 55px; height: 55px; font-size: 28px; }
+            .scroll-top { bottom: 85px; right: 25px; width: 45px; height: 45px; font-size: 18px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <nav>
+            <div class="brand-container">
+                <a href="#inicio" style="display: flex; align-items: center; gap: 15px; color: inherit; text-decoration: none;">
+                    <img src="logo.png" alt="Taurus Consultora">
+                    <span>Taurus Consultora</span>
+                </a>
+            </div>
+            <ul class="nav-links" id="nav-links-menu">
+                <li><a href="#inicio">Inicio</a></li>
+                <li><a href="#nosotros">Nosotros</a></li>
+                <li><a href="#servicios">Servicios</a></li>
+                <li><a href="#trabajos">Proyectos</a></li>
+                <li><a href="#contacto">Contacto</a></li>
+            </ul>
+            <div class="hamburger">
+    <span></span>
+    <span></span>
+    <span></span>
+            </div>
+        </nav>
+    </header>
+
+    <section id="inicio" class="hero">
+        <video autoplay muted loop playsinline class="video-background">
+            <source src="videofondo.mp4" type="video/mp4">
+        </video>
+        <div class="hero-overlay"></div>
+        <div class="hero-content" data-aos="zoom-in" data-aos-duration="1200">
+            <h1>Taurus Consultora</h1>
+            <h2>Expertos en Seguridad, Higiene y Electricidad</h2>
+            <a href="#contacto" class="btn">Solicitar Asesoría</a>
+        </div>
+    </section>
+
+    <section id="nosotros" class="nosotros">
+        <h2 class="section-title" data-aos="fade-up">Quiénes Somos</h2>
+        
+        <div class="nosotros-container">
+            <div class="nosotros-texto" data-aos="fade-right" data-aos-duration="1000">
+                <p>En <strong>Taurus Consultora</strong> somos un equipo de profesionales altamente calificados, comprometidos con la seguridad, eficiencia y continuidad operativa de su empresa o industria.</p>
+                <p>Bajo la dirección del <strong>Licenciado Marcelo Fabián Beldi</strong>, nos especializamos en brindar asesoramiento integral, gestión y ejecución de proyectos tanto en el área de Seguridad e Higiene Laboral como en el campo de las Instalaciones Eléctricas Industriales y Residenciales.</p>
+                <p>Nuestra vasta trayectoria, certificaciones actualizadas y atención técnica personalizada nos permiten ofrecer soluciones a la medida de cada necesidad. Realizamos inspecciones rigurosas y auditorías precisas para que no tenga de qué preocuparse.</p>
+                <p>Garantizamos el estricto cumplimiento de las normativas legales vigentes, transformando las obligaciones de ley en verdaderas inversiones para proteger el capital más valioso de su negocio: <strong>las personas y sus instalaciones</strong>.</p>
+            </div>
+            
+            <div class="nosotros-imagen">
+                <div class="stats-container">
+                    <div class="stat-box">
+                        <div class="stat-number-wrapper">
+                            +<span class="counter" data-target="120">0</span>
+                        </div>
+                        <span class="stat-text">Clientes<br>Satisfechos</span>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-number-wrapper">
+                            +<span class="counter" data-target="30">0</span>
+                        </div>
+                        <span class="stat-text">Años de<br>Experiencia</span>
+                    </div>
+                </div>
+                
+                <img src="img/TAURUSULTIMA.png" alt="Licenciado Marcelo Fabian Beldi - Taurus Consultora" data-aos="fade-left" data-aos-delay="200">
+                
+            </div>
+        </div>
+    </section>
+
+    <section id="servicios" class="servicios">
+        <h2 class="section-title" data-aos="fade-up">Qué Ofrecemos</h2>
+        <div class="servicios-grid">
+            <div class="card" data-aos="fade-up" data-aos-delay="100"><i class="fas fa-hard-hat"></i><h3>Seguridad e Higiene</h3><p>Análisis de riesgos, programas de seguridad, cálculo de carga de fuego y cumplimiento de normativas SRT.</p></div>
+            <div class="card" data-aos="fade-up" data-aos-delay="200"><i class="fas fa-bolt"></i><h3>Instalaciones Eléctricas</h3><p>Montajes industriales, tableros de comando y potencia, iluminación eficiente.</p></div>
+            <div class="card" data-aos="fade-up" data-aos-delay="300"><i class="fas fa-tools"></i><h3>Mantenimiento Industrial</h3><p>Preventivo y correctivo para asegurar la continuidad operativa de su empresa.</p></div>
+            <div class="card" data-aos="fade-up" data-aos-delay="100"><i class="fas fa-tachometer-alt"></i><h3>Mediciones Laborales (SRT)</h3><p>Puesta a tierra (Res 900/15), Iluminación, Ruidos, Carga Térmica y Vibraciones.</p></div>
+            <div class="card" data-aos="fade-up" data-aos-delay="200"><i class="fas fa-chalkboard-teacher"></i><h3>Capacitaciones</h3><p>Formación de personal en riesgo eléctrico, uso de extintores, primeros auxilios, RCP y DEA.</p></div>
+            <div class="card" data-aos="fade-up" data-aos-delay="300"><i class="fas fa-temperature-high"></i><h3>Estudios Termográficos</h3><p>Detección de puntos calientes y fallas ocultas en tableros eléctricos y líneas mediante cámaras infrarrojas.</p></div>
+        </div>
+    </section>
+
+    <section id="trabajos" class="portfolio">
+        <h2 class="section-title" data-aos="fade-up">Nuestros Trabajos</h2>
+        <div class="portfolio-grid" id="grid-container"></div>
+    </section>
+
+    <section class="clientes">
+        <h2 class="section-title" data-aos="fade-up" style="margin-bottom: 2rem;">Confían en Nosotros</h2>
+        <div class="slider-clientes" data-aos="zoom-in" data-aos-delay="200">
+            <div class="slide-track" id="slide-track-left"></div>
+            <div class="slide-track reverse" id="slide-track-right"></div>
+        </div>
+    </section>
+
+    <div id="projectModal" class="modal">
+        <div class="modal-wrapper">
+            <i class="fas fa-chevron-left nav-arrow prev-arrow" onclick="changeProject(-1)"></i>
+            <div class="modal-content">
+                <span class="close-modal">&times;</span>
+                <div class="modal-header">
+                    <img src="" id="modal-img" alt="Trabajo">
+                </div>
+                <div class="modal-body">
+                    <h2 id="modal-title"></h2>
+                    <span id="modal-address" class="modal-address"></span>
+                    <p id="modal-desc" class="modal-desc"></p>
+                </div>
+            </div>
+            <i class="fas fa-chevron-right nav-arrow next-arrow" onclick="changeProject(1)"></i>
+        </div>
+    </div>
+
+    <section id="contacto" class="contacto">
+        <h2 class="section-title" data-aos="fade-up">Contacto</h2>
+        <div class="contacto-container">
+            <div class="info-contacto" data-aos="fade-right" data-aos-duration="1000">
+                <h3>Información</h3>
+                <br>
+                <p><i class="fas fa-phone"></i> <a href="https://wa.me/5491122848995" target="_blank">+54 9 11 2284-8995</a></p>
+                <br>
+                <p><i class="fas fa-envelope"></i> <a href="mailto:marcelo@taurusconsultora.com">marcelo@taurusconsultora.com</a></p>
+                <br>
+                <p><i class="fas fa-map-marker-alt"></i> Buenos Aires, Argentina</p>
+
+                <div class="social-icons-row">
+                    <a href="https://www.instagram.com/taurus_consultora/" target="_blank" class="social-btn insta" title="Instagram">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="https://www.facebook.com/TAURUS.SEH/" target="_blank" class="social-btn face" title="Facebook">
+                        <i class="fab fa-facebook-f"></i>
+                    </a>
+                    <a href="https://www.linkedin.com/in/marcelo-beldi-21072a1b7/" target="_blank" class="social-btn linkedin" title="LinkedIn">
+                        <i class="fab fa-linkedin-in"></i>
+                    </a>
+                    <a href="https://wa.me/5491122848995" target="_blank" class="social-btn wpp" title="WhatsApp">
+                        <i class="fab fa-whatsapp"></i>
+                    </a>
+                </div>
+            </div>
+            
+            <form id="contact-form" action="https://formspree.io/f/mreavrzb" method="POST" data-aos="fade-left" data-aos-duration="1000">
+                <input type="text" name="nombre" placeholder="Nombre" required>
+                <input type="email" name="email" placeholder="Email" required>
+                <input type="tel" name="telefono" placeholder="Teléfono">
+                <textarea name="mensaje" rows="4" placeholder="Consulta..." required></textarea>
+                <button type="submit">Enviar Consulta</button>
+                <p id="form-status" style="margin-top: 10px; font-weight: bold; text-align: center;"></p>
+            </form>
+        </div>
+    </section>
+
+    <a href="#inicio" class="scroll-top">
+        <i class="fas fa-chevron-up"></i>
+    </a>
+
+    <a href="https://wa.me/5491122848995" class="whatsapp-float" target="_blank" data-aos="zoom-in" data-aos-delay="500">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <footer>
+        <p>&copy; 2026 Taurus Consultora. Todos los derechos reservados.</p>
+        
+        <div class="developer-credits">
+            <span>Desarrollado por</span>
+            <a href="https://pocketsolutions.pythonanywhere.com/" target="_blank">
+                <img src="img/pocket-logo.png" alt="Pocket Solutions" class="dev-logo" onerror="this.style.display='none'"> 
+                Pocket Solutions
+            </a>
+        </div>
+    </footer>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+    <script>
+        AOS.init({ once: true, offset: 100 });
+
+        const navMenu = document.getElementById('nav-links-menu');
+        const navItems = document.querySelectorAll('.nav-links a');
+        const indicator = document.createElement('div');
+        indicator.classList.add('nav-indicator');
+        navMenu.appendChild(indicator);
+
+        navItems.forEach(item => {
+            item.addEventListener('mouseenter', (e) => {
+                const itemRect = item.getBoundingClientRect();
+                const menuRect = navMenu.getBoundingClientRect();
+                indicator.style.width = `${itemRect.width}px`;
+                indicator.style.left = `${itemRect.left - menuRect.left}px`;
+                indicator.style.opacity = '1';
+            });
+        });
+        navMenu.addEventListener('mouseleave', () => { indicator.style.opacity = '0'; });
+
+        const hamburger = document.querySelector('.hamburger');
+        const navLinks = document.querySelector('.nav-links');
+        
+        hamburger.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+            hamburger.classList.toggle('active'); // Esto es lo que activa la X
+        });
+        
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                if(window.innerWidth <= 768) {
+                    navLinks.classList.remove('active');
+                    hamburger.classList.remove('active'); // Esto vuelve a las 3 rayitas
+                }
+            });
+        });
+
+        const scrollTopBtn = document.querySelector('.scroll-top');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 300) {
+                scrollTopBtn.classList.add('show');
+            } else {
+                scrollTopBtn.classList.remove('show');
+            }
+        });
+
+        const trackLeft = document.getElementById('slide-track-left');
+        const trackRight = document.getElementById('slide-track-right');
+        let logosLeftHTML = '';
+        let logosRightHTML = '';
+
+        for(let i = 1; i <= 18; i++) {
+            logosLeftHTML += `<div class="slide-cliente"><img src="clientes/cliente${i}.png" alt="Cliente ${i}"></div>`;
+        }
+        trackLeft.innerHTML = logosLeftHTML + logosLeftHTML;
+
+        for(let i = 19; i <= 37; i++) {
+            logosRightHTML += `<div class="slide-cliente"><img src="clientes/cliente${i}.png" alt="Cliente ${i}"></div>`;
+        }
+        trackRight.innerHTML = logosRightHTML + logosRightHTML;
+
+        const counters = document.querySelectorAll('.counter');
+        let hasCounted = false; 
+        const runCounters = () => {
+            counters.forEach(counter => {
+                counter.innerText = '0';
+                const target = +counter.getAttribute('data-target');
+                const updateCounter = () => {
+                    const count = +counter.innerText;
+                    const increment = target / 40; 
+                    if (count < target) {
+                        counter.innerText = Math.ceil(count + increment);
+                        setTimeout(updateCounter, 30); 
+                    } else {
+                        counter.innerText = target;
+                    }
+                };
+                updateCounter();
+            });
+        };
+        const observer = new IntersectionObserver((entries) => {
+            if(entries[0].isIntersecting && !hasCounted) {
+                runCounters();
+                hasCounted = true; 
+            }
+        }, { threshold: 0.5 }); 
+        observer.observe(document.querySelector('.stats-container'));
+
+        const trabajos = [
+            { titulo: "Armado de Tableros Eléctricos", direccion: "Instalación Industrial", descripcion: "Diseño, armado y montaje de tableros eléctricos seccionales y principales bajo normativa AEA 90364. Certificaciones eléctricas hasta 2.2 Kva.", imagen: "img/tableroshechos.jpeg" },
+            { titulo: "Medición de Puesta a Tierra", direccion: "Plantas Industriales, comercios, viviendas", descripcion: "Medición de jabalinas y sistemas de puesta a tierra garantizando el cumplimiento del protocolo SRT 900/15.", imagen: "img/puestaatierra.jpeg" },
+            { titulo: "Estudios Termográficos", direccion: "Mantenimiento Preventivo", descripcion: "Inspección de tableros con cámara térmica para detectar puntos calientes, sobrecargas y prevenir incendios.", imagen: "img/termografias.jpeg" },
+            { titulo: "Supervisión en Obra", direccion: "Obras", descripcion: "Control de contratistas, verificación de medidas de seguridad, confección de permisos de trabajo y uso de EPP en campo. Confección de planes de seguridad en obra Res 51/97; 35/98 y 319/99.", imagen: "img/obra.jpeg" },
+            { titulo: "Medición de Continuidad", direccion: "Auditoría Eléctrica", descripcion: "Verificación de la continuidad de las masas y conductores de protección (PE) para garantizar la seguridad del personal.", imagen: "img/medicioncontinuidad.jpeg" },
+            { titulo: "Prueba de Disyuntores", direccion: "Tableros de Comando", descripcion: "Verificación de tiempos y corrientes de disparo en interruptores diferenciales para asegurar su correcto funcionamiento ante fugas.", imagen: "img/pruebadisyuntores.jpeg" },
+            { titulo: "Cálculo de Carga de Fuego", direccion: "Depósitos e Industrias", descripcion: "Estudio y cálculo de carga de fuego para determinar la resistencia al fuego de las estructuras y el potencial extintor necesario, cumpliendo con la normativa vigente.", imagen: "img/CALCULODECARGADEFUEGO.jpeg" },
+            { titulo: "Capacitación en RCP y DEA", direccion: "Formación In Company", descripcion: "Entrenamiento teórico-práctico al personal en técnicas de Reanimación Cardiopulmonar (RCP) y uso del Desfibrilador Externo Automático (DEA), vitales para actuar ante emergencias.", imagen: "img/CapacitacionesRCPYDEA.jpeg" },
+            { titulo: "Medición de Radiaciones Ionizantes", direccion: "Centros de Salud e Industrias", descripcion: "Relevamiento y medición de radiaciones en áreas de trabajo para garantizar niveles seguros de exposición del personal, según regulaciones nacionales.", imagen: "img/MEDICIONDERADIACIONES.jpeg" }
+        ];
+
+        const container = document.getElementById('grid-container');
+        trabajos.forEach((t, i) => {
+            const card = document.createElement('div');
+            card.className = 'project-card';
+            card.setAttribute('onclick', `abrirModal(${i})`); 
+            card.setAttribute('data-aos', 'fade-up');
+            let delay = ((i % 3) + 1) * 100;
+            card.setAttribute('data-aos-delay', delay.toString());
+            const imgStyle = t.imagen ? `background-image: url('${t.imagen}')` : '';
+            card.innerHTML = `
+                <div class="project-img-preview" style="${imgStyle}"></div>
+                <div class="project-info">
+                    <div><h4>${t.titulo}</h4><span>${t.direccion}</span></div>
+                    <button class="btn-small">Ver Detalles</button>
+                </div>
+            `;
+            container.appendChild(card);
+        });
+
+        const modal = document.getElementById('projectModal');
+        const closeBtn = document.querySelector('.close-modal');
+        const mTitle = document.getElementById('modal-title');
+        const mAddress = document.getElementById('modal-address');
+        const mDesc = document.getElementById('modal-desc');
+        const mImg = document.getElementById('modal-img');
+        let currentProjectIndex = 0;
+
+        function updateModalContent(index) {
+            const d = trabajos[index];
+            mTitle.innerText = d.titulo;
+            mAddress.innerText = d.direccion;
+            mDesc.innerText = d.descripcion;
+            mImg.src = d.imagen || "https://via.placeholder.com/800x400?text=Imagen+No+Encontrada";
+            mImg.onerror = function() { this.src = "https://via.placeholder.com/800x400?text=Revisar+Extension+De+Imagen"; };
+        }
+
+        window.abrirModal = function(i) {
+            currentProjectIndex = i; updateModalContent(currentProjectIndex); modal.classList.add('show');
+        }
+        window.changeProject = function(direction) {
+            currentProjectIndex += direction;
+            if (currentProjectIndex < 0) currentProjectIndex = trabajos.length - 1;
+            else if (currentProjectIndex >= trabajos.length) currentProjectIndex = 0;
+            const content = document.querySelector('.modal-content');
+            content.style.opacity = '0.5';
+            setTimeout(() => { updateModalContent(currentProjectIndex); content.style.opacity = '1'; }, 150);
+        }
+        closeBtn.onclick = () => modal.classList.remove('show');
+        window.onclick = (e) => { if (e.target == modal || e.target.classList.contains('modal-wrapper')) modal.classList.remove('show'); }
+        document.addEventListener('keydown', function(event) {
+            if (modal.classList.contains('show')) {
+                if (event.key === "ArrowLeft") changeProject(-1);
+                else if (event.key === "ArrowRight") changeProject(1);
+                else if (event.key === "Escape") modal.classList.remove('show');
+            }
+        });
+
+        // ENVÍO DE FORMULARIO SIN SALIR DE LA PÁGINA
+        const form = document.getElementById('contact-form');
+        const status = document.getElementById('form-status');
+
+        form.addEventListener('submit', async function(e) {
+            e.preventDefault(); // Evita que la página se recargue o cambie de pestaña
+            
+            status.innerHTML = "Enviando...";
+            status.style.color = "var(--color-gris-medio)";
+
+            const data = new FormData(form);
+            
+            try {
+                const response = await fetch(form.action, {
+                    method: form.method,
+                    body: data,
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                });
+                
+                if (response.ok) {
+                    status.innerHTML = "¡Gracias! Tu consulta ha sido enviada con éxito.";
+                    status.style.color = "green";
+                    form.reset(); // Limpia los campos del formulario
+                    setTimeout(() => { status.innerHTML = ""; }, 5000); // Borra el mensaje después de 5 segundos
+                } else {
+                    status.innerHTML = "Oops! Hubo un problema al enviar tu mensaje. Intenta de nuevo.";
+                    status.style.color = "red";
+                }
+            } catch (error) {
+                status.innerHTML = "Oops! Hubo un problema de conexión. Intenta de nuevo.";
+                status.style.color = "red";
+            }
+        });
+    </script>
+</body>
+</html>
